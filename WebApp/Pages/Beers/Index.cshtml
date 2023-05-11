@@ -1,0 +1,61 @@
+﻿@page
+@model WebApp.Pages.Beers.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+    <button >Add Random from Api</button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Beer[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Beer[0].RelaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Beer[0].Volume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Beer[0].Voltage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Beer[0].Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Beer) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Volume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Voltage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
