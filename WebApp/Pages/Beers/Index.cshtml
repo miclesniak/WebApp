@@ -5,36 +5,36 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
 <p>
     <a asp-page="Create">Create New</a>
-    <button >Add Random from Api</button>
+    <button style="margin-left: 95px;" >Add Random from Api</button>
 </p>
 
+<form method="get">
 <div>
     <label for="searchInput">Filter by Title:</label>
     <input type="text" id="searchInput" name="searchString" value="@Model.SearchString" />
     <button type="submit">Search</button>
 </div>
+</form>
 
 <table class="table">
-    <thead>s
+    <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Beer[0].Title)
+                <a asp-page="./Index" asp-route-sortOrder="title_desc">Title</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Beer[0].RelaseDate)
+                <a asp-page="./Index" asp-route-sortOrder="releaseDate">Release Data</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Beer[0].Volume)
+                <a asp-page="./Index" asp-route-sortOrder="volume">Volume</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Beer[0].Voltage)
+                <a asp-page="./Index" asp-route-sortOrder="voltage">Voltage</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Beer[0].Price)
+                <a asp-page="./Index" asp-route-sortOrder="price">Price</a>
             </th>
             <th></th>
         </tr>
