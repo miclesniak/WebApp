@@ -11,6 +11,13 @@
     <a asp-page="Create">Create New</a>
     <button >Add Random from Api</button>
 </p>
+
+<div>
+    <label for="searchInput">Filter by Title:</label>
+    <input type="text" id="searchInput" name="searchString" value="@Model.SearchString" />
+    <button type="submit">Search</button>
+</div>
+
 <table class="table">
     <thead>s
         <tr>
