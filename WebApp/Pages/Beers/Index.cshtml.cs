@@ -8,6 +8,7 @@ using WebApp.Models;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using System.Globalization;
 
 namespace WebApp.Pages.Beers
 {
@@ -22,7 +23,7 @@ namespace WebApp.Pages.Beers
             _httpClientFactory = httpClientFactory;
         }
 
-        public IList<Beer> Beer { get; set; } = default!;
+        public List<Beer> Beer { get; set; } = new List<Beer>();
         public string SearchString { get; set; }
         public string CurrentSort { get; set; }
 
@@ -65,6 +66,7 @@ namespace WebApp.Pages.Beers
         public async Task<IActionResult> OnPostAddRandomBeerAsync()
         {
             var randomBeerUrl = "https://api.punkapi.com/v2/beers/random";
+            Random rand = new Random();
 
             try
             {
@@ -76,21 +78,36 @@ namespace WebApp.Pages.Beers
                         response.EnsureSuccessStatusCode();
 
                         var responseContent = await response.Content.ReadAsStringAsync();
-                        var randomBeer = JsonSerializer.Deserialize<Beer>(responseContent);
+                        var apiBeers = JsonSerializer.Deserialize<List<ApiBeer>>(responseContent);
+                        var apiBeer = apiBeers?.FirstOrDefault();
+                        Console.WriteLine(apiBeers);
 
-                        if (randomBeer != null)
+                        if (apiBeer != null)
                         {
-                            _context.Beer.Add(randomBeer);
+                            Beer beer = new Beer
+                            {
+                                Title = apiBeer.name,
+                                RelaseDate = DateTime.ParseExact(apiBeer.first_brewed, "MM/yyyy", CultureInfo.InvariantCulture), // Assuming the date is in "MM/yyyy" format
+                                Volume = 500,
+                                Voltage = apiBeer.abv,
+                                Price = rand.Next(3, 11) // Random price between 3 and 10
+                            };
+
+                            _context.Beer.Add(beer);
                             await _context.SaveChangesAsync();
+                            Beer = _context.Beer.ToList();
                         }
                     }
                 }
+
+                // Call OnGetAsync after adding the beer to populate the Beer list.
+                await OnGetAsync(CurrentSort, SearchString);
 
                 return RedirectToPage("./Index");
             }
             catch (Exception ex)
             {
-                // Obsługa błędów - można dodać odpowiednie logowanie lub komunikat dla użytkownika
+                // Handle errors - you can add appropriate logging or user message
                 return RedirectToPage("./Index");
             }
         }
